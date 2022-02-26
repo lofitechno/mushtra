@@ -4,7 +4,17 @@ from sklearn.cluster import KMeans
 
 
 #TODO:cut image at first
+
 #TODO:Enter number of clusters 67 и 78 строки
+def set_clusters_number():
+	print("Введите количество горизонтальных линий")
+	x = input()
+	print(x)
+
+	print("Введите количество вертикальных линий")
+	y = input()
+	print(y)
+	#return x, y
 
 #функция определяет цвет КГБ клетки-массива
 def find_cell_colour(cell):
@@ -28,6 +38,8 @@ img = cv2.imread("C:/andrey/Mushtra/images/mushtra_sept.jpg")
 img = cv2.resize(img, (0,0), fx = 0.2, fy =0.15)
 img = img[20:, 50:]
 
+#TODO предварительно показывать изобажение и опрашивать количество гризонт и вертик линий на нем
+set_clusters_number()
 
 #разбивка по цветовым каналам
 (B, G, R) = cv2.split(img)
