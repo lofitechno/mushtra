@@ -5,16 +5,15 @@ from sklearn.cluster import KMeans
 
 #TODO:cut image at first
 
-#TODO:Enter number of clusters 67 и 78 строки
 def set_clusters_number():
 	print("Введите количество горизонтальных линий")
-	x = input()
+	x = int(input())
 	print(x)
 
 	print("Введите количество вертикальных линий")
-	y = input()
+	y = int(input())
 	print(y)
-	#return x, y
+	return x, y
 
 #функция определяет цвет КГБ клетки-массива
 def find_cell_colour(cell):
@@ -30,7 +29,7 @@ def find_cell_colour(cell):
 	else:
 		return (0,255,0)
 
-
+#TODO : спрашивать путь до файла
 #считываем изображение
 img = cv2.imread("C:/andrey/Mushtra/images/mushtra_sept.jpg")
 
@@ -39,7 +38,10 @@ img = cv2.resize(img, (0,0), fx = 0.2, fy =0.15)
 img = img[20:, 50:]
 
 #TODO предварительно показывать изобажение и опрашивать количество гризонт и вертик линий на нем
-set_clusters_number()
+cv2.imshow("filename",img)
+cv2.waitKey(10)
+nx_clusters, ny_clusters = set_clusters_number() # 13 and 31
+
 
 #разбивка по цветовым каналам
 (B, G, R) = cv2.split(img)
@@ -74,7 +76,7 @@ for x in range(0, len(lines)):
 			x_centroids.append([x1, x2])
 
 #применяем метод кластеризации методом К средних и строим линии по найденным центрам кластеров
-kmeans = KMeans(n_clusters=13, random_state=0).fit(x_centroids)
+kmeans = KMeans(n_clusters=nx_clusters, random_state=0).fit(x_centroids) # n_clusters = 13
 
 x_centroids = []
 for i in kmeans.cluster_centers_:#??? почему у центра кластера две координаты??
@@ -86,7 +88,7 @@ for i in kmeans.cluster_centers_:#??? почему у центра класте�
 #отсортированный массив Х центроид кластеров
 x_centroids = sorted(x_centroids)
 
-kmeans = KMeans(n_clusters=31, random_state=0).fit(y_centroids)
+kmeans = KMeans(n_clusters=ny_clusters, random_state=0).fit(y_centroids) # n_clusters = 31
 
 y_centroids = []
 for i in kmeans.cluster_centers_:#??? почему у центра кластера две координаты??
@@ -99,7 +101,7 @@ y_centroids = sorted(y_centroids)
 
 #проходимся по всем клеткам, найденным на изображении, определяем цвет и рисуем круг, предположительно, найденного цвета
 for i, line_x in enumerate(x_centroids[:-2]):
-	for j, line_y in enumerate(y_centroids[:-2]):
+	for j, line_y in enumerate(y_centroids[:-1]):
 		next_line_x = x_centroids[i + 1]
 		next_line_y = y_centroids[j + 1]
 
